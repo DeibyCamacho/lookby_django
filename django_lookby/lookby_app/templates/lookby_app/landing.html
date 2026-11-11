@@ -1,0 +1,124 @@
+{% extends 'lookby_app/base.html' %}
+
+{% block title %}LookBy — Belleza, Bienestar & Cosmética de Alta Gama{% endblock %}
+
+{% block content %}
+  <section class="hero-section">
+    <div class="hero-bg-media">
+      <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1600&q=80" alt="Belleza premium" />
+      <div class="hero-bg-overlay"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content">
+        <p class="eyebrow">La nueva era de la estética y el cuidado</p>
+        <h1 class="hero-title">Reserva en los salones más <span>exclusivos</span> del país.</h1>
+        <p class="hero-subtitle">Descubre centros de belleza premium, agenda citas en tiempo real y compra cosmética profesional seleccionada por expertos.</p>
+        <div class="hero-actions">
+          <a href="#locales" class="btn btn-gold btn-lg">Explorar salones</a>
+          <a href="#productos" class="btn btn-outline-gold btn-lg">Ver catálogo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="categorias" class="container section-block">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Especialidades</p>
+        <h2 class="section-title">Explora por categoría</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      {% for category in categories %}
+        <article class="card-luxury category-card">
+          <p class="card-kicker">{{ category.title }}</p>
+          <p>{{ category.description }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="locales" class="container section-block">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Selección exclusiva</p>
+        <h2 class="section-title">Locales de belleza premium</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      {% for salon in salons %}
+        <article class="card-luxury salon-card">
+          <div class="mini-badge">{{ salon.tag }}</div>
+          <h3>{{ salon.name }}</h3>
+          <p>{{ salon.location }}</p>
+          <div class="meta-row">
+            <span>⭐ {{ salon.rating }}</span>
+            <button class="btn btn-gold btn-sm">Reservar</button>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="productos" class="container section-block section-end">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Cosmética de alta gama</p>
+        <h2 class="section-title">Catálogo de productos</h2>
+      </div>
+    </div>
+    <div class="card-grid products-grid">
+      {% for product in products %}
+        <article class="card-luxury product-card">
+          <span class="product-category">{{ product.category }}</span>
+          <h3>{{ product.name }}</h3>
+          <div class="product-footer">
+            <strong>{{ product.price }}</strong>
+            <button class="btn btn-outline-gold btn-sm">Agregar</button>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="container section-block section-cta">
+    <div class="cta-box">
+      <div>
+        <p class="eyebrow">Impulsa tu negocio</p>
+        <h2>¿Eres dueño de un salón o proveedor mayorista?</h2>
+      </div>
+      <div class="cta-actions">
+        <a href="{% url 'business_dashboard' %}" class="btn btn-gold btn-lg">Portal negocios</a>
+        <a href="{% url 'supplier_dashboard' %}" class="btn btn-outline-gold btn-lg">Portal proveedores</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4>LookBy</h4>
+        <p>Plataforma líder en gestión integral para salones, bienestar y abastecimiento cosmético premium.</p>
+      </div>
+      <div>
+        <h4>Explorar</h4>
+        <ul>
+          <li><a href="#categorias">Categorías</a></li>
+          <li><a href="#locales">Salones</a></li>
+          <li><a href="#productos">Productos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Cuenta</h4>
+        <ul>
+          <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+          <li><a href="{% url 'register' %}">Crear cuenta</a></li>
+          <li><a href="{% url 'recover' %}">Recuperar acceso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 LookBy SpA. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+{% endblock %}

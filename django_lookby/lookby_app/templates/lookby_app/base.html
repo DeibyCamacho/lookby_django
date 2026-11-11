@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}LookBy{% endblock %}</title>
+  <meta name="description" content="LookBy, belleza, bienestar y cosmética premium." />
+  <link rel="stylesheet" href="{% static 'lookby_app/css/styles.css' %}" />
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <header class="top-nav">
+    <a href="{% url 'home' %}" class="brand" aria-label="LookBy Inicio">
+      <span>LookBy</span>
+    </a>
+
+    <nav aria-label="Navegación principal">
+      <ul class="nav-links">
+        <li><a href="{% url 'home' %}#categorias">Categorías</a></li>
+        <li><a href="{% url 'home' %}#locales">Locales</a></li>
+        <li><a href="{% url 'home' %}#productos">Catálogo</a></li>
+        <li><a href="{% url 'business_dashboard' %}">Para Negocios</a></li>
+        <li><a href="{% url 'supplier_dashboard' %}">Mayoristas</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      {% if user %}
+        <span class="user-pill">{{ user.name }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-outline-gold btn-sm">Cerrar sesión</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-gold btn-sm">Ingresar</a>
+        <div class="role-pills">
+          <a href="{% url 'superadmin_dashboard' %}" class="role-pill-btn">Admin</a>
+          <a href="{% url 'client_dashboard' %}" class="role-pill-btn">Cliente</a>
+          <a href="{% url 'business_dashboard' %}" class="role-pill-btn">Negocio</a>
+          <a href="{% url 'supplier_dashboard' %}" class="role-pill-btn">Proveedor</a>
+        </div>
+      {% endif %}
+    </div>
+  </header>
+
+  {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'lookby_app/base.html' %}
+
+{% block title %}Recuperar acceso — LookBy{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+  <main class="auth-shell">
+    <div class="auth-card">
+      <p class="eyebrow text-center">Recupera tu acceso</p>
+      <h1 class="auth-title">Restablecer contraseña</h1>
+
+      {% if message %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input id="email" name="email" type="email" placeholder="usuario@email.cl" required />
+        </div>
+        <button type="submit" class="btn btn-gold w-full">Enviar enlace</button>
+      </form>
+
+      <p class="auth-footer">
+        <a href="{% url 'login' %}" class="link-gold">Volver al inicio de sesión</a>
+      </p>
+    </div>
+  </main>
+{% endblock %}

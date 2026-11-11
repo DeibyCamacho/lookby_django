@@ -1,0 +1,37 @@
+{% extends 'lookby_app/base.html' %}
+
+{% block title %}Panel del cliente — LookBy{% endblock %}
+
+{% block content %}
+  <main class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-profile">
+        <div class="avatar">{{ user.name|slice:':1' }}</div>
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.email }}</p>
+        <span class="badge badge-gold">{{ user.display_role }}</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="active">Explorar salones</a>
+        <a href="#">Mis citas</a>
+        <a href="#">Mis pedidos</a>
+        <a href="#">Mi perfil</a>
+      </nav>
+    </aside>
+
+    <section class="dashboard-main">
+      <div class="stats-grid">
+        {% for stat in stats %}
+          <article class="stat-card">
+            <p class="stat-label">{{ stat.label }}</p>
+            <h3>{{ stat.value }}</h3>
+          </article>
+        {% endfor %}
+      </div>
+      <div class="content-card large-card">
+        <h2>Mi experiencia</h2>
+        <p>Tu agenda, pedidos y reseñas están listas para gestionarse desde este panel.</p>
+      </div>
+    </section>
+  </main>
+{% endblock %}
