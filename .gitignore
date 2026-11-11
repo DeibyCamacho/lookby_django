@@ -12,6 +12,26 @@ logs/
 .claude-replay.*
 .tmp-*
 
+# Python and Django
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+db.sqlite3
+*.sqlite3
+staticfiles/
+media/
+.env
+.env.*
+!.env.example
+
+# Local database files and credentials
+.pgdata/
+.pgpass*
+LookBy_DJango/
+.local_data/
+
 # Platform-managed agentplat state, not project source. In the
 # client-initiated single-repo workspace layout (make's `Path: "."` spec) the
 # repo root IS the workspace root, so these land inside this repo rather than

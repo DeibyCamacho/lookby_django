@@ -1,69 +1,113 @@
-# LookBy Django
+# LookBy
 
-Proyecto Django puro para la plataforma LookBy, con autenticación, paneles por rol y base de datos PostgreSQL.
+Aplicacion web construida con Django para la plataforma LookBy. Incluye
+registro e inicio de sesion, recuperacion de contrasena y paneles por tipo de
+usuario.
 
 ## Requisitos
 
-- Python 3.11+
-- PostgreSQL 14+
+- Python 3.12 o superior
+- PostgreSQL 14 o superior
 - pip
 
-## Instalación
+## Configuracion local en Windows
 
-1. Entrar al proyecto:
-   ```bash
-   cd django_lookby
-   ```
-2. Crear entorno virtual:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   ```
-3. Instalar dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Crear base de datos PostgreSQL:
-   ```sql
-   CREATE DATABASE lookby;
-   CREATE USER postgres WITH PASSWORD 'postgres';
-   ALTER ROLE postgres WITH SUPERUSER;
-   ```
-5. Ejecutar migraciones:
-   ```bash
-   python manage.py migrate
-   ```
-6. Levantar servidor:
-   ```bash
-   python manage.py runserver 0.0.0.0:8000
-   ```
+Abre PowerShell en la raiz del proyecto y crea el entorno virtual:
 
-## Configuración de base de datos
-
-La conexión a PostgreSQL está definida en [django_lookby/lookby_django/settings.py](django_lookby/lookby_django/settings.py) con variables de entorno:
-
-- POSTGRES_DB
-- POSTGRES_USER
-- POSTGRES_PASSWORD
-- POSTGRES_HOST
-- POSTGRES_PORT
-
-Ejemplo:
-
-```bash
-export POSTGRES_DB=lookby
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=postgres
-export POSTGRES_HOST=127.0.0.1
-export POSTGRES_PORT=5432
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
 ```
+
+Genera una clave secreta nueva:
+
+```powershell
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Copia el resultado en `DJANGO_SECRET_KEY` dentro de `.env`. Completa tambien
+los valores `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`,
+`POSTGRES_HOST` y `POSTGRES_PORT` con las credenciales de una base de datos
+PostgreSQL existente. No compartas ni subas `.env`.
+
+| Variable | Uso | Valor local predeterminado |
+| --- | --- | --- |
+| `DJANGO_SECRET_KEY` | Clave criptografica de Django; es obligatoria | Sin valor; genera una clave |
+| `DJANGO_DEBUG` | Activa el modo de depuracion | `1` |
+| `DJANGO_ALLOWED_HOSTS` | Hosts permitidos separados por comas | `127.0.0.1,localhost` |
+| `POSTGRES_DB` | Nombre de la base de datos | `lookby` |
+| `POSTGRES_USER` | Usuario de PostgreSQL | `postgres` |
+| `POSTGRES_PASSWORD` | Contrasena de PostgreSQL | Sin valor; configurar localmente |
+| `POSTGRES_HOST` | Host de PostgreSQL | `127.0.0.1` |
+| `POSTGRES_PORT` | Puerto de PostgreSQL | `5432` |
+
+Por defecto, la configuracion local espera una base `lookby` y el servidor
+PostgreSQL en `127.0.0.1:5432`. El usuario configurado debe tener permisos
+sobre esa base. Crea la base si aun no existe:
+
+```sql
+CREATE DATABASE lookby OWNER postgres;
+```
+
+Ejecuta las migraciones y levanta el servidor:
+
+```powershell
+python manage.py migrate
+python manage.py runserver
+```
+
+Abre http://127.0.0.1:8000/. Para comprobar la configuracion y ejecutar las
+pruebas:
+
+```powershell
+python manage.py check
+python manage.py test lookby_app
+```
+
+## Rutas principales
+
+| Ruta | Uso |
+| --- | --- |
+| `/` | Pagina de inicio |
+| `/login/` | Inicio de sesion |
+| `/register/` | Registro |
+| `/recuperar/` | Recuperacion de contrasena |
+| `/cliente/` | Panel de cliente |
+| `/negocio/` | Panel de negocio |
+| `/proveedor/` | Panel de proveedor |
+| `/superadmin/` | Panel de administracion |
+
+## Alcance actual
+
+Las pantallas de registro, inicio de sesion y recuperacion son demostrativas:
+usan cuentas de ejemplo y datos en memoria/sesion. El registro no crea
+usuarios persistentes, la recuperacion no envia correos y los paneles no
+representan datos guardados en PostgreSQL. No uses las cuentas de demostracion
+ni esta autenticacion como sistema de produccion.
 
 ## Estructura
 
-- [django_lookby/lookby_django](django_lookby/lookby_django): configuración del proyecto
-- [django_lookby/lookby_app](django_lookby/lookby_app): vistas, rutas, templates y lógica Django
+```text
+.
+├── config/                 # Configuracion, URLs, ASGI y WSGI
+├── lookby_app/             # Aplicacion Django
+│   ├── migrations/
+│   ├── static/lookby_app/  # CSS y otros recursos estaticos
+│   └── templates/lookby_app/
+├── .env.example            # Plantilla sin credenciales
+├── .gitignore
+├── manage.py
+└── requirements.txt
+```
 
-## Acceso
+Las credenciales, el entorno virtual, las bases de datos locales y los
+archivos generados se excluyen de Git mediante `.gitignore`.
 
-- Landing: http://localhost:8000/
-- Login: http://localhost:8000/login/
+## Despliegue
+
+`runserver` y `DJANGO_DEBUG=1` son solo para desarrollo. En produccion configura
+una clave secreta propia, `DJANGO_DEBUG=0`, `DJANGO_ALLOWED_HOSTS` restrictivo,
+HTTPS, un servidor WSGI/ASGI de produccion y `collectstatic`. No reutilices
+credenciales de desarrollo.
